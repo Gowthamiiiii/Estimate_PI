@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Estimate Pi</title>
+    <style>
+        .modal h2 {
+            margin-top: 0;
+            font-size: 30px;
+            margin-bottom: 20px;
+        }
+
+        .modal p {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .modal span {
+            font-weight: bold;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        .contain {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        button:hover {
+            background-color: #3e8e41;
+        }
+
+        .modal-contain {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 36px;
+        }
+
+        p {
+            font-size: 20px;
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 24px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .modal {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .hide {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="contain">
+        <h1>Estimate Pi</h1>
+        <p>Click the button below to calculate an estimate of Pi using a Taylor series.</p>
+        <button id="cal-btn">Calculate Pi</button>
+    </div>
+
+    <div class="modal-contain hide">
+        <div class="modal">
+            <h2>Result</h2>
+            <p>The estimated value of Pi is: <span id="pi-val"></span></p>
+            <p>The error of the estimate over 20 iterations is: <span id="pi-err"></span></p>
+            <button id="close-modal-btn">Close</button>
+        </div>
+    </div>
+
+    <script>
+        const piValue = document.getElementById('pi-val');
+        const piError = document.getElementById('pi-err');
+        const calculateBtn = document.getElementById('cal-btn');
+        const Modal_closeBtn = document.getElementById('close-modal-btn');
+        const modalcontain = document.querySelector('.modal-contain');
+
+
+        function calculatePi(iterations) {
+            let pi = 0;
+            let sign = 1;
+            for (let i = 0; i < iterations; i++) {
+                pi += sign * 4 / (2 * i + 1);
+                sign *= -1;
+            }
+            return pi;
+        }
+
+        function Modal_close() {
+            modalcontain.classList.add('hide');
+        }
+
+        function getResult() {
+            const inputVal = parseInt(prompt('Enter the number of iterations (between 1 and 20):'));
+            if (isNaN(inputVal) || inputVal < 1 || inputVal > 20) {
+                alert('Invalid input!');
+                return;
+            }
+            const piEstimate = calculatePi(inputVal);
+            const piErrorEstimate = Math.abs(Math.PI - piEstimate);
+            piValue.textContent = piEstimate.toFixed(5);
+            piError.textContent = piErrorEstimate.toFixed(5);
+            modalcontain.classList.remove('hide');
+        }
+
+        calculateBtn.addEventListener('click', getResult);
+        Modal_closeBtn.addEventListener('click', Modal_close);
+
+    </script>
+</body>
+
+</html>
